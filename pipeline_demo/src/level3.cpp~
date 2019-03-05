@@ -1,0 +1,35 @@
+#include "ros/ros.h"
+#include "std_msgs/UInt8.h"
+#include <sstream>
+#include <stdio.h>
+#include <iostream>
+
+void drain_callback(std_msgs::UInt8 msg){
+  std::cout<<"received "<<(unsigned int)(msg.data)<<std::endl;
+  std_msgs::UInt8 new_msg;
+  new_msg.data = (msg.data)<<1;
+  source.publish(new_msg);
+  return;
+};
+
+int main(int argc, char **argv){
+	ros::init(argc, argv, "pipe_level2");
+	ros::NodeHandle n;
+	ros::Subscriber drain = n.subscribe("pipe_l1_output", 5, drain_callback);
+	ros::Publisher source = n.advertise<std_msgs::UInt8>("pipe_l2_output", 5);
+	ros::Rate loop_rate(1);
+
+	ros::spin();
+	/* unsigned char count=0;
+	while(ros::ok()){
+		count++;
+		std::cout<<"new loop "<<count<<"\n";
+	        std_msgs::UInt8 msg;
+		msg.data = count;
+		source.publish(msg);
+		ros::spinOnce();
+		loop_rate.sleep();
+		}*/
+	
+	return 0;
+}

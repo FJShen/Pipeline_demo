@@ -1,0 +1,22 @@
+#include "ros/ros.h"
+#include <sstream>
+#include <stdio.h>
+#include <iostream>
+
+int main(int argc, char **argv){
+	ros::init(argc, argv, "level1");
+	ros::NodeHandle n;
+	ros::Publisher source = n.advertise<uint8>("source_topic", 5);
+	ros::Rate loop_rate(1);
+	
+	uint count=0;
+	while(ros::ok()){
+		count++;
+		uint8 msg = count;
+		source.publish(msg);
+		ros::spinOnce();
+		loop_rate.sleep();
+	}
+	
+	return 0;
+}
