@@ -8,6 +8,7 @@ class SubscribeAndPublish{
 public:
     SubscribeAndPublish(){
       source = n.advertise<std_msgs::UInt8>("pipe_l2_output", 5);
+      //drain = n.subscribe("pipe_l1_output", 5, SubscribeAndPublish::drain_callback);
       drain = n.subscribe("pipe_l1_output", 5, &SubscribeAndPublish::drain_callback, this);
 
     }
